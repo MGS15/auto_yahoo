@@ -2,9 +2,10 @@
 This an automated script to help improve the reputation of your IP address in yahoo ESP.
 
 ## Doc
-Using
+Using:
 	Python 3.8.10
 	pip 20.0.2
+	Chrome 107.0.5304.107
 ## Packages
 - selenium:
 ```
