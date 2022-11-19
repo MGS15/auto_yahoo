@@ -7,27 +7,26 @@
 """
 
 import init.globals as globals
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
+import app.user_input as user_input
+import init.webdriver as wd
+import time
+import traceback
 
 def test():
 	try:
-		driver = webdriver.Firefox()
-		driver.get("http://www.python.org")
-		assert "Python" in driver.title # Nice to work with
-		elem = driver.find_element(By.NAME, "q")
-		elem.clear()
-		elem.send_keys("This is a test")
-		elem.send_keys(Keys.RETURN)
-		assert "No results found." not in driver.page_source
-		driver.close()
-	except:
+		driver = wd.init_webdriver()
+		driver.get('https://mail.yahoo.com/')
+		time.sleep(30)
+		driver.quit()
+	except Exception as e:
 		print(globals.Red + "Error accured!" + globals.White)
+		traceback.print_exc()
 
+def init_app():
+	user_input.get_cvs_filename("Enter CVS file (email | password | proxy | port | user | password): ")
 
 def main():
-	test()
+	init_app()
 
 if __name__ == "__main__":
 	main()
