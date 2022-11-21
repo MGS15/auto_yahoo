@@ -6,3 +6,4 @@ def random_wait_time(min: int, max: int):
 
 def generate_relpy_message():
 	random_reply = ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase, k=random.randint(100, 200)))
+	return random_reply
