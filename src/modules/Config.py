@@ -2,8 +2,8 @@ import init.globals as globals
 from modules import InboxActions, SpamActions
 
 class Config:
-	spamActions = SpamActions()
-	inboxActions = InboxActions()
+	spamActions = SpamActions.SpamActions()
+	inboxActions = InboxActions.InboxActions()
 	def __init__(self):
 		self.emailFrom = ""
 		self.emailSubject = ""
