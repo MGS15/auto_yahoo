@@ -7,7 +7,7 @@ class Config:
 	def __init__(self):
 		self.emailFrom = ""
 		self.emailSubject = ""
-		self.timeOut = 1000
+		self.timeOut = 60000
 		self.numberOfThreads = 1
 	
 	# Getters
