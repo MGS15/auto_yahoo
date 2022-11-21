@@ -14,3 +14,4 @@ BGreen = "\033[1;32m"       # Green
 # PATHS
 ASSETS = "assets"
 DRIVER_PATH = ASSETS + os.path.sep + "chromedriver.exe"
+RESOURCES_PATH = ASSETS + os.path.sep + "resources.csv"
