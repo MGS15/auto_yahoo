@@ -1,5 +1,6 @@
 import modules.Config as Config
 from init import globals
+from helpers import randomize
 
 def inputStrings(prompt: str):
 	errColor = globals.BBlack
@@ -44,5 +45,7 @@ def getInputs():
 	config.inboxActions.setStar(int(inputInt("\tStar / 100: ", -1, 101)))
 	config.inboxActions.setReply(int(inputInt("\tReply / 100: ", -1, 101)))
 	config.inboxActions.setReplyMessage(input("Set custome message for reply (Leave empty to randomize): "))
+	if config.inboxActions.getReplyMessage() == None or config.inboxActions.getReplyMessage() == '':
+		config.inboxActions.setReplyMessage(randomize.generate_relpy_message())
 	return config
 	
