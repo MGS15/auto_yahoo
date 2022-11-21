@@ -5,6 +5,7 @@ class InboxActions:
 		self.reply = 90
 		self.archive = 90
 		self.star = 90
+		self.replyMessage = ""
 	
 	# Getters
 	def getReply(self):
@@ -13,6 +14,8 @@ class InboxActions:
 		return self.archive
 	def getStar(self):
 		return self.star
+	def getReplyMessage(self):
+		return self.replyMessage
 	# Setters
 	def setReply(self, reply: int):
 		if reply in range(0, 100):
@@ -29,3 +32,5 @@ class InboxActions:
 			self.star = star
 		else:
 			raise Exception(globals.Red + "This action requires a value between 0 and 100!" + globals.White)
+	def setReplyMessage(self, message: str):
+		self.replyMessage = message
