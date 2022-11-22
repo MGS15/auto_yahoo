@@ -23,7 +23,7 @@ def inputInt(promt: str, min: int, max: int):
 			errColor = globals.Red
 			print(errColor + "Expecting a digit!" + globals.White)
 			continue ;
-		if (inputVal > min and inputVal < max):
+		if (inputVal in range(min, max)):
 			break ;
 		else:
 			errColor = globals.Red
@@ -34,16 +34,16 @@ def getInputs():
 	config = Config.Config()
 	config.setEmailFrom(inputStrings("Enter email from: "))
 	config.setEmailSubject(inputStrings("Enter email subject: "))
-	config.setTimeout(int(inputInt("Enter timeout value: ", -1, 180001)))
-	config.setNumberOfThreads(int(inputInt("Enter number of threads: ", -1, 51)))
+	config.setTimeout(int(inputInt("Enter timeout value: ", 0, 180000)))
+	config.setNumberOfThreads(int(inputInt("Enter number of threads: ", 1, 50)))
 	print("Spam actions:")
-	config.spamActions.setRestoreInbox(int(inputInt("\tRestore inbox ratio / 100: ", -1, 101)))
-	config.spamActions.setMoveToInbox(int(inputInt("\tMove to inbox ratio / 100: ", -1, 101)))
-	config.spamActions.setNotSpam(int(inputInt("\tNot spam ratio / 100: ", -1, 101)))
+	config.spamActions.setRestoreInbox(int(inputInt("\tRestore inbox ratio / 100: ", 0, 100)))
+	config.spamActions.setMoveToInbox(int(inputInt("\tMove to inbox ratio / 100: ", 0, 100)))
+	config.spamActions.setNotSpam(int(inputInt("\tNot spam ratio / 100: ", 0, 100)))
 	print("Inbox actions:")
-	config.inboxActions.setArchive(int(inputInt("\tArchive / 100: ", -1, 101)))
-	config.inboxActions.setStar(int(inputInt("\tStar / 100: ", -1, 101)))
-	config.inboxActions.setReply(int(inputInt("\tReply / 100: ", -1, 101)))
+	config.inboxActions.setArchive(int(inputInt("\tArchive / 100: ", 0, 100)))
+	config.inboxActions.setStar(int(inputInt("\tStar / 100: ", 0, 100)))
+	config.inboxActions.setReply(int(inputInt("\tReply / 100: ", 0, 100)))
 	config.inboxActions.setReplyMessage(input("Set custome message for reply (Leave empty to randomize): "))
 	if config.inboxActions.getReplyMessage() == None or config.inboxActions.getReplyMessage() == '':
 		config.inboxActions.setReplyMessage(randomize.generate_relpy_message())
