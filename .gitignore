@@ -131,3 +131,5 @@ dmypy.json
 # costume
 *.zip
 *.csv
+storage/*/*.json
+storage/*/*.js
