@@ -13,5 +13,8 @@ BGreen = "\033[1;32m"       # Green
 
 # PATHS
 ASSETS = "assets"
+STORAGE = "storage" + os.path.sep
 DRIVER_PATH = ASSETS + os.path.sep + "chromedriver.exe"
 RESOURCES_PATH = ASSETS + os.path.sep + "resources.csv"
+MANIFEST_PATH = ASSETS + os.path.sep + "manifest.json"
+SCRIPT_PATH = ASSETS + os.path.sep + "background.js"
