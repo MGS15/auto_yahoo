@@ -26,12 +26,12 @@ class Config:
 	def setEmailSubject(self, emailSubject: str):
 		self.emailSubject = emailSubject
 	def setTimeout(self, timeout: int):
-		if timeout > 0 and timeout < 180000:
+		if timeout in range(0, 180000):
 			self.timeOut = timeout
 		else:
 			raise Exception(globals.Red + "Time out value must be between 1 sec and 3 min!" + globals.White)
 	def setNumberOfThreads(self, numberOfThreads: int):
-		if numberOfThreads > 0 and numberOfThreads < 50:
+		if numberOfThreads in range(0, 50):
 			self.numberOfThreads = numberOfThreads
 		else:
 			raise Exception(globals.Red + "Time out value must be between 1 and 50!" + globals.White)
