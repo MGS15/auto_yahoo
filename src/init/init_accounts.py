@@ -36,5 +36,6 @@ def read_csv():
 				print(globals.Red + "Input error at line " + str(line) + " in resources file!" + globals.White)
 				print(e)
 				exit(1)
+		print(globals.Green + "✔️  Done initializing accounts." + globals.White)
 		return accounts
 		
