@@ -1,5 +1,6 @@
 from modules.Account import Account
 from init import globals as globals
+from helpers import readfiles
 import csv
 from os.path import exists
 
@@ -19,8 +20,7 @@ def fill_account_info(line: int, row: list):
 		exit(1)
 
 def read_csv():
-	if not exists(globals.RESOURCES_PATH):
-		print(globals.Red + "Resource file is not available! ({globals.RESOURCES_PATH})\nCheck the file and try again!" + globals.White)
+	if not readfiles.check_file_exists(globals.RESOURCES_PATH):
 		exit(1)
 	accounts = []
 	with open(globals.RESOURCES_PATH) as csv_file:
