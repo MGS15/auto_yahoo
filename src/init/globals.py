@@ -21,6 +21,13 @@ LOG_FILE = STORAGE + 'logs'
 MANIFEST_PATH = ASSETS + os.path.sep + "manifest.json"
 SCRIPT_PATH = ASSETS + os.path.sep + "background.js"
 
+# Errors
+EMAIL_ERROR = 1
+PASS_ERROR = 2
+PROXY_ERROR = 3
+CAPTCHA_ERROR = 4
+BLOCKED_ACC_ERROR = 5
+
 def create_logfile():
 	if not exists(LOG_FILE):
 		log_file = open(LOG_FILE, 'w+')
