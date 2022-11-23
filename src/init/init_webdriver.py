@@ -4,12 +4,26 @@ from modules.Account import Account
 import undetected_chromedriver as uc
 from fake_useragent import UserAgent
 from selenium.webdriver.chrome.options import Options
-import zipfile
+from selenium import webdriver
+import os
 
 def create_extention(manifist, script, filename):
-	with zipfile.ZipFile(filename, 'w') as ext:
-		ext.writestr("manifest.json", manifist)
-		ext.writestr("background.js", script)
+	manfile = None
+	scrptfile = None
+	if not os.path.exists(filename + os.path.sep + "manifest.json"):
+		manfile = open(filename + os.path.sep + "manifest.json", 'w+')
+		manfile.write(manifist)
+	else:
+		manfile = open(filename + os.path.sep + "manifest.json", 'w')
+		manfile.write(manifist)
+	if not os.path.exists(filename + os.path.sep + "background.js"):
+		scrptfile = open(filename + os.path.sep + "background.js", 'w+')
+		scrptfile.write(script)
+	else:
+		scrptfile = open(filename + os.path.sep + "background.js" , 'w')
+		scrptfile.write(script)
+
+	
 
 def chrome_proxy(account: Account):
 	manifist_json = readfiles.read_file_content(globals.MANIFEST_PATH)
@@ -19,7 +33,9 @@ def chrome_proxy(account: Account):
             "user": account.getProxyUser(),
             "pass": account.getProxyPassword(),
         }
-	ex_name = globals.STORAGE + account.getEmail().split('@')[0] + "_proxy_extention.zip"
+	ex_name = globals.STORAGE + account.getEmail().split('@')[0] + "_proxy_extention"
+	if not os.path.exists(ex_name):
+		os.mkdir(ex_name)
 	create_extention(manifist_json, background_js, ex_name)
 	return ex_name
 
@@ -33,6 +49,7 @@ def init_webdriver(account: Account):
 	chrm_opt.add_argument('--disable-infobars')
 	chrm_opt.add_experimental_option("excludeSwitches",["ignore-certificate-errors"])
 	chrm_opt.add_argument(f'user-agent={userAgent}')
-	chrm_opt.add_extension(plugin_file)
-	driver = uc.Chrome(chrome_options=chrm_opt, executable_path=globals.DRIVER_PATH)
+	# chrm_opt.add_argument('--load-extension=' + os.getcwd() + os.path.sep + plugin_file)
+	driver = webdriver.Chrome(chrome_options=chrm_opt, executable_path=globals.DRIVER_PATH)
+	print(globals.Green + "✔️  Done initializing webdriver." + globals.White)
 	return driver
