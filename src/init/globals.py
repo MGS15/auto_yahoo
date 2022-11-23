@@ -1,4 +1,5 @@
 import os.path
+from os.path import exists
 
 # Colors
 Black = "\033[0;30m"        # Black
@@ -16,5 +17,11 @@ ASSETS = "assets"
 STORAGE = "storage" + os.path.sep
 DRIVER_PATH = ASSETS + os.path.sep + "chromedriver.exe"
 RESOURCES_PATH = ASSETS + os.path.sep + "resources.csv"
+LOG_FILE = STORAGE + 'logs'
 MANIFEST_PATH = ASSETS + os.path.sep + "manifest.json"
 SCRIPT_PATH = ASSETS + os.path.sep + "background.js"
+
+def create_logfile():
+	if not exists(LOG_FILE):
+		log_file = open(LOG_FILE, 'w+')
+		log_file.write("Logs: ")
