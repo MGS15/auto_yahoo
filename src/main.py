@@ -6,24 +6,14 @@
 	@Links:		https://github.com/MGS15/
 """
 
-import init.globals as globals
-import app.user_input as user_input
-import init.webdriver as wd
+from app import route
+from init import globals
 import time
-import traceback
-
-def test():
-	try:
-		driver = wd.init_webdriver()
-		driver.get('https://mail.yahoo.com/')
-		time.sleep(30)
-		driver.quit()
-	except Exception as e:
-		print(globals.Red + "Error accured!" + globals.White)
-		traceback.print_exc()
 
 def init_app():
-	user_input.get_cvs_filename("Enter CVS file (email | password | proxy | port | user | password): ")
+	globals.create_logfile()
+	route.route()
+	time.sleep(10)
 
 def main():
 	init_app()
