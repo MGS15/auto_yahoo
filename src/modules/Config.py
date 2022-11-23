@@ -26,7 +26,7 @@ class Config:
 	def setEmailSubject(self, emailSubject: str):
 		self.emailSubject = emailSubject
 	def setTimeout(self, timeout: int):
-		if timeout in range(0, 180000):
+		if timeout in range(0, 300):
 			self.timeOut = timeout
 		else:
 			raise Exception(globals.Red + "Time out value must be between 1 sec and 3 min!" + globals.White)

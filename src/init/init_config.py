@@ -34,7 +34,7 @@ def getInputs():
 	config = Config.Config()
 	config.setEmailFrom(inputStrings("Enter email from: "))
 	config.setEmailSubject(inputStrings("Enter email subject: "))
-	config.setTimeout(int(inputInt("Enter timeout value: ", 0, 180000)))
+	config.setTimeout(int(inputInt("Enter timeout value: ", 0, 300)))
 	config.setNumberOfThreads(int(inputInt("Enter number of threads: ", 1, 50)))
 	print("Spam actions:")
 	config.spamActions.setRestoreInbox(int(inputInt("\tRestore inbox ratio / 100: ", 0, 100)))
