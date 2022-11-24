@@ -42,15 +42,15 @@ def chrome_proxy(account: Account):
 def init_webdriver(account: Account):
 	ua = UserAgent()
 	plugin_file = chrome_proxy(account)
-	userAgent = ua.random
+	# userAgent = ua.random
 	chrm_opt = Options()
 	chrm_opt.add_argument("--lang={}".format("en"))
 	chrm_opt.add_argument('--disable-gpu')
 	chrm_opt.add_argument('--disable-infobars')
 	chrm_opt.add_experimental_option("excludeSwitches",["enable-automation"])
 	chrm_opt.add_experimental_option("useAutomationExtension", False)
-	chrm_opt.add_argument(f'user-agent={userAgent}')
+	# chrm_opt.add_argument(f'user-agent={userAgent}')
 	# chrm_opt.add_argument('--load-extension=' + os.getcwd() + os.path.sep + plugin_file)
-	driver = webdriver.Chrome(chrome_options=chrm_opt, executable_path=globals.DRIVER_PATH)
+	driver = uc.Chrome(chrome_options=chrm_opt, executable_path=globals.DRIVER_PATH)
 	print(globals.Green + "✔️  Done initializing webdriver." + globals.White)
 	return driver
