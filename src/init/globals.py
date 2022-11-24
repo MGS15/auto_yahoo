@@ -31,4 +31,4 @@ BLOCKED_ACC_ERROR = 5
 def create_logfile():
 	if not exists(LOG_FILE):
 		log_file = open(LOG_FILE, 'w+')
-		log_file.write("Logs: ")
+		log_file.close()
