@@ -1,8 +1,8 @@
 from init import globals
-import datetime
+from datetime import date
 
 def get_time_stamp():
-	now = datetime.now()
+	now = date.today()
 	timestamp = now.strftime("%Y/%m/%d - %H:%M:%S")
 	return timestamp
 
@@ -20,6 +20,7 @@ def logger(level: int, email: str):
 		line += 'BLOCKED_ACC_ERROR\t\t: account is blocked: (' + email + ')'
 	else:
 		line += 'Unknown error: (' + email + ')'
+	line += '\n'
 	logfile = open(globals.LOG_FILE, 'a+')
 	logfile.write(line)
 	logfile.close()
