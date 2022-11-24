@@ -13,7 +13,7 @@ import time
 def init_app():
 	globals.create_logfile()
 	route.route()
-	time.sleep(10)
+	time.sleep(900000)
 
 def main():
 	init_app()
