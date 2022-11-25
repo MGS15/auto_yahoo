@@ -2,7 +2,6 @@ from modules.Account import Account
 from init import globals as globals
 from helpers import readfiles
 import csv
-from os.path import exists
 
 def fill_account_info(line: int, row: list):
 	try:
@@ -13,6 +12,7 @@ def fill_account_info(line: int, row: list):
 		account.setProxyPort(int(row[3]))
 		account.setProxyUser(row[4])
 		account.setProxyPassword(row[5])
+		globals.sub_dir_storage(account.getEmail().split('@')[0])
 		return account
 	except Exception as e:
 		print(globals.Red + "Input error at line " + str(line) + " in resources file!" + globals.White)

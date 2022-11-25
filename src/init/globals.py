@@ -1,5 +1,6 @@
 import os.path
 from os.path import exists
+from os import mkdir
 
 # Colors
 Black = "\033[0;30m"        # Black
@@ -32,3 +33,12 @@ def create_logfile():
 	if not exists(LOG_FILE):
 		log_file = open(LOG_FILE, 'w+')
 		log_file.close()
+
+def init_storage():
+	if not exists(STORAGE):
+		mkdir(STORAGE)
+	create_logfile()
+
+def sub_dir_storage(name: str):
+	if not exists(STORAGE + name):
+		mkdir(STORAGE + name)
