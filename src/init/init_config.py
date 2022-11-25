@@ -47,9 +47,6 @@ def getInputs():
 	config.inboxActions.setReplyMessage(input("Set custome message for reply (Leave empty to randomize): "))
 	if config.inboxActions.getReplyMessage() == None or config.inboxActions.getReplyMessage() == '':
 		config.inboxActions.setReplyMessage(randomize.generate_relpy_message())
-	print("Go Login Auth:")
-	config.setGologinId(inputStrings("\tEnter GoLogin ID: "))
-	config.setGologinToken(inputStrings("\tEnter GoLogin API token: "))
 	print(globals.Green + "✔️  Done initializing config." + globals.White)
 	return config
 	

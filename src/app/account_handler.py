@@ -10,30 +10,45 @@ from app import specifiers
 from init import globals
 from helpers import logger
 
-def write_text_input(browser: webdriver.Chrome, timeout: int, text: str, id: str):
+def reCaptcha_handler(browser: webdriver.Chrome, timeout: int):
 	try:
-		specifiers.wait_for_element_by_id(id, timeout, browser)
-		element = browser.find_element(By.ID, id)
-		specifiers.write_humanly(text, element)
+		WebDriverWait(browser, timeout).until(
+			EC.frame_to_be_available_and_switch_to_it(browser.find_element(By.ID, 'recaptcha-iframe'))
+		)
+		color = globals.Yellow
+		while True:
+			_input = input(f"{color}Enter \"y/Y\" after solving and submitting reCaptcha: {globals.White}")
+			if _input == "y" or _input == "Y":
+				break
+			else:
+				color = globals.Red
+		# WebDriverWait(browser, timeout).until(
+		# 	EC.frame_to_be_available_and_switch_to_it(browser.find_elements(By.TAG_NAME, 'iframe')[0])
+		# )
+		# WebDriverWait(browser, timeout).until(
+		# 	EC.element_to_be_clickable((By.ID, 'recaptcha-anchor'))
+		# )
+		# element = browser.find_element(By.XPATH, '/html/body/div/div[3]/div/div/div/span')
+		# print(globals.BRed + "test 3" + globals.White)
+		# element.click()
+		# specifiers.wait_for_specific_time(30, 50)
+		# browser.switch_to.default_content()
+		# print(globals.BRed + "test 5" + globals.White)
+		# element = browser.find_element(By.ID, 'recaptcha-submit')
+		# element.send_keys(Keys.ENTER)
+		# specifiers.wait_for_specific_time(30, 50)
 	except:
-		raise Exception(globals.Red + f"Error while waiting for element {id}..." + globals.White)
-
-def send_key_to_elem(browser: webdriver.Chrome, timeout: int, key, id: str):
-	try:
-		specifiers.wait_for_element_by_id(id, timeout, browser)
-		element = browser.find_element(By.ID, id)
-		element.send_keys(key)
-	except:
-		raise Exception(globals.Red + f"Error while waiting for element {id}..." + globals.White)
+		return False
+		# traceback.print_exc()
 
 def login(browser: webdriver.Chrome, config: Config, account: Account):
 	try:
-		write_text_input(browser, config.getTimeOut(), account.getEmail(), 'login-username')
-		send_key_to_elem(browser, config.getTimeOut(), Keys.ENTER, 'login-signin')
-		specifiers.wait_for_specific_time(20, 30)
+		specifiers.write_text_input(browser, config.getTimeOut(), account.getEmail(), 'login-username')
+		specifiers.send_key_to_elem(browser, config.getTimeOut(), Keys.ENTER, 'login-signin')
+		specifiers.wait_for_specific_time(30, 80)
 	except:
 		print(globals.Red + "Error while waiting for user to login..." + globals.White)
-		traceback.print_exc()
+		logger.logger(globals.UNKNOWN_ERROR, '', account.getEmail())
 		browser.quit()
 	try:
 		browser.find_element(By.ID, 'username-error')
@@ -42,30 +57,23 @@ def login(browser: webdriver.Chrome, config: Config, account: Account):
 		browser.quit()
 	except:
 		pass
+	reCaptcha_handler(browser=browser, timeout=config.getTimeOut())
 	try:
-		# specifiers.wait_for_specific_time(50, 100)
-		print(globals.BRed + "test 1" + globals.White)
-		WebDriverWait(browser, config.getTimeOut()).until(
-			EC.frame_to_be_available_and_switch_to_it(browser.find_element(By.ID, 'recaptcha-iframe'))
-		)
-		# print(browser.page_source)
-		# print(browser.find_elements(By.TAG_NAME, 'iframe')[0].)
-		WebDriverWait(browser, config.getTimeOut()).until(
-			EC.frame_to_be_available_and_switch_to_it(browser.find_elements(By.TAG_NAME, 'iframe')[0])
-		)
-		# print(browser.page_source)
-		WebDriverWait(browser, config.getTimeOut()).until(
-			EC.element_to_be_clickable((By.ID, 'recaptcha-anchor'))
-		)
-		element = browser.find_element(By.XPATH, '/html/body/div/div[3]/div/div/div/span')
-		print(globals.BRed + "test 3" + globals.White)
-		element.click()
-		specifiers.wait_for_specific_time(30, 50)
-		browser.switch_to.default_content()
-		print(globals.BRed + "test 5" + globals.White)
-		element = browser.find_element(By.ID, 'recaptcha-submit')
-		element.send_keys(Keys.ENTER)
-		specifiers.wait_for_specific_time(30, 50)
+		specifiers.write_text_input(browser, config.getTimeOut(), account.getPassword(), 'login-passwd')
+		specifiers.send_key_to_elem(browser, config.getTimeOut(), Keys.ENTER, 'login-signin')
+		specifiers.wait_for_specific_time(30, 80)
 	except:
-		print(globals.Red + "reCaptcha error..." + globals.White)
-		# traceback.print_exc()
+		print(globals.Red + "Error while waiting for password..." + globals.White)
+		logger.logger(globals.UNKNOWN_ERROR, '', account.getEmail())
+		browser.quit()
+	reCaptcha_handler(browser=browser, timeout=config.getTimeOut())
+	try:
+		browser.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[1]/div[2]/div[2]/form/p')
+		print(globals.Red + "Invalid password..." + globals.White)
+		logger.logger(globals.PASS_ERROR, account.getEmail())
+		browser.quit()
+	except:
+		pass
+
+	
+	

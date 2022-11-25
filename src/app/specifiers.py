@@ -19,3 +19,19 @@ def wait_for_element_by_id(id: str, timeout: int, browser: webdriver.Chrome):
 
 def wait_for_specific_time(min, max):
 	randomize.random_wait_time(min, max)
+
+def write_text_input(browser: webdriver.Chrome, timeout: int, text: str, id: str):
+	try:
+		wait_for_element_by_id(id, timeout, browser)
+		element = browser.find_element(By.ID, id)
+		write_humanly(text, element)
+	except:
+		raise Exception(globals.Red + f"Error while waiting for element {id}..." + globals.White)
+
+def send_key_to_elem(browser: webdriver.Chrome, timeout: int, key, id: str):
+	try:
+		wait_for_element_by_id(id, timeout, browser)
+		element = browser.find_element(By.ID, id)
+		element.send_keys(key)
+	except:
+		raise Exception(globals.Red + f"Error while waiting for element {id}..." + globals.White)

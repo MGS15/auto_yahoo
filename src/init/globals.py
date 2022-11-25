@@ -28,6 +28,7 @@ PASS_ERROR = 2
 PROXY_ERROR = 3
 CAPTCHA_ERROR = 4
 BLOCKED_ACC_ERROR = 5
+UNKNOWN_ERROR = 6
 
 def create_logfile():
 	if not exists(LOG_FILE):
