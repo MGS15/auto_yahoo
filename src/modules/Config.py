@@ -9,8 +9,6 @@ class Config:
 		self.emailSubject = ""
 		self.timeOut = 60000
 		self.numberOfThreads = 1
-		self.goLoginId = ''
-		self.goLoginToken = ''
 	
 	# Getters
 	def getEmailFrom(self):
@@ -21,10 +19,6 @@ class Config:
 		return self.timeOut
 	def getNumberOfThreads(self):
 		return self.numberOfThreads
-	def getGoLoginId(self):
-		return self.goLoginId
-	def getGoLoginToken(self):
-		return self.goLoginToken
 	
 	# Setters
 	def setEmailFrom(self, emailFrom: str):
@@ -41,13 +35,3 @@ class Config:
 			self.numberOfThreads = numberOfThreads
 		else:
 			raise Exception(globals.Red + "Time out value must be between 1 and 50!" + globals.White)
-	def setGologinId(self, gologinId: str):
-		if gologinId != '' and gologinId is not None:
-			self.goLoginId = gologinId
-		else:
-			raise Exception(globals.Red + "GoLogin account ID can't be empty!" + globals.White)
-	def setGologinToken(self, token: str):
-		if token != '' and token is not None:
-			self.goLoginToken = token
-		else:
-			raise Exception(globals.Red + "GoLogin account ID can't be empty!" + globals.White)

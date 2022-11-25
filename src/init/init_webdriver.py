@@ -1,10 +1,11 @@
 import init.globals as globals
 from helpers import readfiles
 from modules.Account import Account
+from modules.Config import Config
 import undetected_chromedriver as uc
 from fake_useragent import UserAgent
 from selenium.webdriver.chrome.options import Options
-from selenium import webdriver
+# from selenium import webdriver
 import os
 
 def create_extention(manifist, script, filename):
@@ -33,7 +34,7 @@ def chrome_proxy(account: Account):
             "user": account.getProxyUser(),
             "pass": account.getProxyPassword(),
         }
-	ex_name = globals.STORAGE + account.getEmail().split('@')[0] + "_proxy_extention"
+	ex_name = globals.STORAGE + account.getEmail().split('@')[0] + os.path.sep + "proxy_extention"
 	if not os.path.exists(ex_name):
 		os.mkdir(ex_name)
 	create_extention(manifist_json, background_js, ex_name)
@@ -51,6 +52,9 @@ def init_webdriver(account: Account):
 	chrm_opt.add_experimental_option("useAutomationExtension", False)
 	# chrm_opt.add_argument(f'user-agent={userAgent}')
 	# chrm_opt.add_argument('--load-extension=' + os.getcwd() + os.path.sep + plugin_file)
+	bookmarks = 'user-data-dir=' + globals.STORAGE + 'Bookmarks'
+	print(bookmarks)
+	chrm_opt.add_argument(bookmarks)
 	driver = uc.Chrome(chrome_options=chrm_opt, executable_path=globals.DRIVER_PATH)
 	print(globals.Green + "✔️  Done initializing webdriver." + globals.White)
 	return driver
