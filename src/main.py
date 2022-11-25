@@ -10,13 +10,10 @@ from app import route
 from init import globals
 import time
 
-def init_app():
-	globals.create_logfile()
+def main():
+	globals.init_storage()
 	route.route()
 	time.sleep(900000)
-
-def main():
-	init_app()
 
 if __name__ == "__main__":
 	main()
