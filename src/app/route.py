@@ -9,3 +9,5 @@ def route():
 	specifiers.load_cookies(accounts[0].getEmail().split('@')[0], chwd)
 	account_handler.login(chwd, config, accounts[0])
 	chwd.get("https://mail.yahoo.com/")
+	account_handler.goto_folder(chwd, config, accounts[0], 'Spam')
+	account_handler.goto_message(chwd, config, 3)

@@ -39,7 +39,6 @@ def reCaptcha_handler(browser: webdriver.Chrome, timeout: int):
 		# specifiers.wait_for_specific_time(30, 50)
 	except:
 		return False
-		# traceback.print_exc()
 
 def login(browser: webdriver.Chrome, config: Config, account: Account):
 	try:
@@ -77,6 +76,36 @@ def login(browser: webdriver.Chrome, config: Config, account: Account):
 	specifiers.save_cookies(account.getEmail().split('@')[0], browser)
 	print(f"{globals.Green}{account.getEmail()}✔️  logged in!{globals.White}")
 
+def goto_folder(browser: webdriver.Chrome, config: Config, account: Account, folder: str):
+	pos = 1
+	while (pos:=pos+1):
+		xpath = f'/html/body/div[1]/div/div[1]/div/div[2]/div/div[1]/nav/div/div[3]/div[1]/ul/li[{pos}]'
+		WebDriverWait(browser, config.getTimeOut()).until(
+			EC.presence_of_element_located((By.XPATH, xpath))
+			)
+		element = browser.find_element(By.XPATH, xpath)
+		if element.text == folder:
+			element.click()
+			return
+		else:
+			if pos > 9:
+				break
+	logger.logger(globals.UNKNOWN_ERROR, account.getEmail())
+	raise Exception(globals.Red + f"Could not loccate the folder named '{folder}'!" + globals.White)
 	
+def goto_message(browser: webdriver.Chrome, config: Config, pos: int):
+	xpathfrom = f'/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div/div[2]/div/div/div[3]/div/div[1]/ul/li[{pos}]/a/div/div[1]/div[2]/span/span'
+	WebDriverWait(browser, config.getTimeOut()).until(
+		EC.presence_of_element_located((By.XPATH, xpathfrom))
+		)
+	xpathsubj = f'/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div/div[2]/div/div/div[3]/div/div[1]/ul/li[{pos}]/a/div/div[2]/div[1]/div[1]/span[1]'
+	WebDriverWait(browser, config.getTimeOut()).until(
+		EC.presence_of_element_located((By.XPATH, xpathfrom))
+		)
+	fromname = browser.find_element(By.XPATH, xpathfrom)
+	subject = browser.find_element(By.XPATH, xpathsubj)
+	if fromname.text == config.getEmailFrom() and subject.text == config.getEmailSubject():
+		subject.click()
 
-	
+def perform_spam_actions(browser: webdriver.Chrome, config: Config):
+	pass
