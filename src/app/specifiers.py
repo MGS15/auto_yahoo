@@ -1,10 +1,13 @@
 from helpers import randomize
+from init import globals
 from selenium import webdriver
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from helpers import logger
+import json
+import os
 
 def write_humanly(text: str, element: WebElement):
 	element.clear()
@@ -35,3 +38,16 @@ def send_key_to_elem(browser: webdriver.Chrome, timeout: int, key, id: str):
 		element.send_keys(key)
 	except:
 		raise Exception(globals.Red + f"Error while waiting for element {id}..." + globals.White)
+
+def save_cookies(uname: str, browser: webdriver.Chrome):
+	with open(f'{globals.STORAGE}{uname}{os.path.sep}cookies.json', 'w') as cf:
+		json.dump(browser.get_cookies(), cf)
+
+def load_cookies(uname: str, browser: webdriver.Chrome):
+	if not os.path.exists(f'{globals.STORAGE}{uname}{os.path.sep}cookies.json'):
+		return 
+	with open(f'{globals.STORAGE}{uname}{os.path.sep}cookies.json', 'r') as cf:
+		cookies = json.load(cf)
+	for cookie in cookies:
+		browser.add_cookie(cookie)
+		browser.refresh()

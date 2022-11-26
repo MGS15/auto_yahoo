@@ -5,6 +5,7 @@ from modules.Config import Config
 import undetected_chromedriver as uc
 from fake_useragent import UserAgent
 from selenium.webdriver.chrome.options import Options
+from app import specifiers
 # from selenium import webdriver
 import os
 
@@ -52,9 +53,6 @@ def init_webdriver(account: Account):
 	chrm_opt.add_experimental_option("useAutomationExtension", False)
 	# chrm_opt.add_argument(f'user-agent={userAgent}')
 	# chrm_opt.add_argument('--load-extension=' + os.getcwd() + os.path.sep + plugin_file)
-	bookmarks = 'user-data-dir=' + globals.STORAGE + 'Bookmarks'
-	print(bookmarks)
-	chrm_opt.add_argument(bookmarks)
 	driver = uc.Chrome(chrome_options=chrm_opt, executable_path=globals.DRIVER_PATH)
 	print(globals.Green + "✔️  Done initializing webdriver." + globals.White)
 	return driver

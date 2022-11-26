@@ -74,6 +74,9 @@ def login(browser: webdriver.Chrome, config: Config, account: Account):
 		browser.quit()
 	except:
 		pass
+	specifiers.save_cookies(account.getEmail().split('@')[0], browser)
+	print(f"{globals.Green}{account.getEmail()}✔️  logged in!{globals.White}")
 
 	
+
 	
