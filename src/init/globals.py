@@ -30,6 +30,11 @@ CAPTCHA_ERROR = 4
 BLOCKED_ACC_ERROR = 5
 UNKNOWN_ERROR = 6
 
+# Spam Actions
+SA_RESTORE_TO_INBOX = 'restore_to_inbox'
+SA_MOVE_TO_INBOX = 'move_to_inbox'
+SA_NOT_SPAM = 'not_spam'
+
 def create_logfile():
 	if not exists(LOG_FILE):
 		log_file = open(LOG_FILE, 'w+')
