@@ -10,6 +10,18 @@ def route():
 	account_handler.login(chwd, config, accounts[0])
 	chwd.get("https://mail.yahoo.com/")
 	account_handler.goto_folder(chwd, config, accounts[0], 'Spam')
-	account_handler.goto_message(chwd, config, 3)
-	account_handler.perform_spam_actions(chwd, config, accounts[0])
+	specifiers.wait_for_specific_time(40, 50)
+	pos = 3
+	msgs_num = account_handler.get_number_of_msgs(chwd)
+	while pos < msgs_num:
+		if account_handler.goto_message(chwd, config, pos):
+			specifiers.wait_for_specific_time(30, 50)
+			account_handler.perform_spam_actions(chwd, config, accounts[0])
+			specifiers.wait_for_specific_time(20, 35)
+			msgs_num = account_handler.get_number_of_msgs(chwd)
+			pos -= 1
+		pos += 1
+	print(globals.Green + "✔️  Done with spam!" + globals.White)
+	account_handler.goto_folder(chwd, config, accounts[0], 'Inbox')
+	specifiers.save_cookies(accounts[0].getEmail().split('@')[0], chwd)
 	

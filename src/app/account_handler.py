@@ -50,11 +50,10 @@ def login(browser: webdriver.Chrome, config: Config, account: Account):
 		browser.quit()
 	except:
 		pass
-	specifiers.save_cookies(account.getEmail().split('@')[0], browser)
 	print(f"{globals.Green}{account.getEmail()}✔️  logged in!{globals.White}")
 
 def goto_folder(browser: webdriver.Chrome, config: Config, account: Account, folder: str):
-	pos = 1
+	pos = 0
 	while (pos:=pos+1):
 		xpath = f'/html/body/div[1]/div/div[1]/div/div[2]/div/div[1]/nav/div/div[3]/div[1]/ul/li[{pos}]'
 		WebDriverWait(browser, config.getTimeOut()).until(
@@ -71,18 +70,24 @@ def goto_folder(browser: webdriver.Chrome, config: Config, account: Account, fol
 	raise Exception(globals.Red + f"Could not loccate the folder named '{folder}'!" + globals.White)
 	
 def goto_message(browser: webdriver.Chrome, config: Config, pos: int):
-	xpathfrom = f'/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div/div[2]/div/div/div[3]/div/div[1]/ul/li[{pos}]/a/div/div[1]/div[2]/span/span'
-	WebDriverWait(browser, config.getTimeOut()).until(
-		EC.presence_of_element_located((By.XPATH, xpathfrom))
-		)
+	xpathfrom = f'/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div/div[2]/div/div/div[3]/div/div[1]/ul/li[{pos}]/a/div/div[1]/div[2]/span'
 	xpathsubj = f'/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div/div[2]/div/div/div[3]/div/div[1]/ul/li[{pos}]/a/div/div[2]/div[1]/div[1]/span[1]'
-	WebDriverWait(browser, config.getTimeOut()).until(
-		EC.presence_of_element_located((By.XPATH, xpathfrom))
-		)
+	try:
+		WebDriverWait(browser, config.getTimeOut()).until(
+			EC.presence_of_element_located((By.XPATH, xpathfrom))
+			)
+		WebDriverWait(browser, config.getTimeOut()).until(
+			EC.presence_of_element_located((By.XPATH, xpathfrom))
+			)
+	except:
+		return False
 	fromname = browser.find_element(By.XPATH, xpathfrom)
 	subject = browser.find_element(By.XPATH, xpathsubj)
 	if fromname.text == config.getEmailFrom() and subject.text == config.getEmailSubject():
 		subject.click()
+		return True
+	else:
+		return False
 
 def scroll_down_inner_scrollbar(browser: webdriver.Chrome):
 	xpath = '/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div[2]'
@@ -101,19 +106,20 @@ def perform_spam_actions(browser: webdriver.Chrome, config: Config, email: str):
 			)
 		scroll_down_inner_scrollbar(browser=browser)
 		actions = spam_actions_handler(config)
-		rd = randomize.random_num_in_range(0, len(actions))
-		if rd == globals.SA_RESTORE_TO_INBOX:
+		rd = randomize.random_num_in_range(0, len(actions) - 1)
+		if actions[rd] == globals.SA_RESTORE_TO_INBOX:
 			raw_spam_action(
 				browser,
 				config.getTimeOut(),
 				'/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div[1]/div[1]/ul/li[1]/div/button'
 				)
-		elif rd == globals.SA_MOVE_TO_INBOX:
+		elif actions[rd] == globals.SA_MOVE_TO_INBOX:
 			raw_spam_action(
 				browser,
 				config.getTimeOut(),
 				'/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div[1]/div[1]/ul/li[2]/div/span/button'
 				)
+			specifiers.wait_for_specific_time(10, 25)
 			raw_spam_action(
 				browser,
 				config.getTimeOut(),
@@ -153,3 +159,7 @@ def raw_spam_action(browser: webdriver.Chrome, timeout: int, xpath: str):
 	)
 	element = browser.find_element(By.XPATH, xpath)
 	element.click()
+
+def get_number_of_msgs(browser: webdriver.Chrome) -> int:
+	elements = browser.find_elements(By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div/div[2]/div/div/div[3]/div/div[1]/ul/li')
+	return len(elements)
