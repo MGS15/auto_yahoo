@@ -52,6 +52,14 @@ def load_cookies(uname: str, browser: webdriver.Chrome):
 		browser.add_cookie(cookie)
 		browser.refresh()
 
+def scroll_down_inner_scrollbar(browser: webdriver.Chrome, xpath: str):
+	element = browser.find_element(By.XPATH, xpath)
+	scroll = 0
+	while scroll < 4:
+		browser.execute_script('arguments[0].scrollTop = arguments[0].scrollTop + arguments[0].offsetHeight;', element)
+		scroll += 1
+		wait_for_specific_time(10, 40)
+
 def get_number_of_msgs(browser: webdriver.Chrome) -> int:
 	elements = browser.find_elements(By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div/div[2]/div/div/div[3]/div/div[1]/ul/li')
 	return len(elements)

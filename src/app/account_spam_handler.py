@@ -89,22 +89,13 @@ def goto_message(browser: webdriver.Chrome, config: Config, pos: int):
 	else:
 		return False
 
-def scroll_down_inner_scrollbar(browser: webdriver.Chrome):
-	xpath = '/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div[2]'
-	element = browser.find_element(By.XPATH, xpath)
-	scroll = 0
-	while scroll < 4:
-		browser.execute_script('arguments[0].scrollTop = arguments[0].scrollTop + arguments[0].offsetHeight;', element)
-		scroll += 1
-		specifiers.wait_for_specific_time(10, 40)
-
 def perform_spam_actions(browser: webdriver.Chrome, config: Config, email: str):
 	try:
 		xpath = '/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div[2]'
 		WebDriverWait(browser, config.getTimeOut()).until(
 			EC.presence_of_element_located((By.XPATH, xpath))
 			)
-		scroll_down_inner_scrollbar(browser=browser)
+		specifiers.scroll_down_inner_scrollbar(browser, '/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div[2]')
 		actions = spam_actions_handler(config)
 		rd = randomize.random_num_in_range(0, len(actions) - 1)
 		if actions[rd] == globals.SA_RESTORE_TO_INBOX:
