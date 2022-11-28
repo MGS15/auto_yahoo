@@ -159,7 +159,3 @@ def raw_spam_action(browser: webdriver.Chrome, timeout: int, xpath: str):
 	)
 	element = browser.find_element(By.XPATH, xpath)
 	element.click()
-
-def get_number_of_msgs(browser: webdriver.Chrome) -> int:
-	elements = browser.find_elements(By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div/div[2]/div/div/div[3]/div/div[1]/ul/li')
-	return len(elements)
