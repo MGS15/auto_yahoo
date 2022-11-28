@@ -11,3 +11,5 @@ def route():
 	chwd.get("https://mail.yahoo.com/")
 	account_handler.goto_folder(chwd, config, accounts[0], 'Spam')
 	account_handler.goto_message(chwd, config, 3)
+	account_handler.perform_spam_actions(chwd, config, accounts[0])
+	

@@ -7,7 +7,7 @@ from modules.Config import Config
 from modules.Account import Account
 from app import specifiers
 from init import globals
-from helpers import logger
+from helpers import logger, randomize
 
 def reCaptcha_handler(browser: webdriver.Chrome, timeout: int):
 	while True:
@@ -84,8 +84,72 @@ def goto_message(browser: webdriver.Chrome, config: Config, pos: int):
 	if fromname.text == config.getEmailFrom() and subject.text == config.getEmailSubject():
 		subject.click()
 
-def scroll_down_inner_scrollbar():
-	pass
+def scroll_down_inner_scrollbar(browser: webdriver.Chrome):
+	xpath = '/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div[2]'
+	element = browser.find_element(By.XPATH, xpath)
+	scroll = 0
+	while scroll < 4:
+		browser.execute_script('arguments[0].scrollTop = arguments[0].scrollTop + arguments[0].offsetHeight;', element)
+		scroll += 1
+		specifiers.wait_for_specific_time(10, 40)
 
-def perform_spam_actions(browser: webdriver.Chrome, config: Config):
-	pass
+def perform_spam_actions(browser: webdriver.Chrome, config: Config, email: str):
+	try:
+		xpath = '/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div[2]'
+		WebDriverWait(browser, config.getTimeOut()).until(
+			EC.presence_of_element_located((By.XPATH, xpath))
+			)
+		scroll_down_inner_scrollbar(browser=browser)
+		actions = spam_actions_handler(config)
+		rd = randomize.random_num_in_range(0, len(actions))
+		if rd == globals.SA_RESTORE_TO_INBOX:
+			raw_spam_action(
+				browser,
+				config.getTimeOut(),
+				'/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div[1]/div[1]/ul/li[1]/div/button'
+				)
+		elif rd == globals.SA_MOVE_TO_INBOX:
+			raw_spam_action(
+				browser,
+				config.getTimeOut(),
+				'/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div[1]/div[1]/ul/li[2]/div/span/button'
+				)
+			raw_spam_action(
+				browser,
+				config.getTimeOut(),
+				'/html/body/div[1]/div/div[1]/div/div[7]/div/div[1]/div/div/ul[2]/div/ul[1]/li[1]/button'
+				)
+		else:
+			raw_spam_action(
+				browser,
+				config.getTimeOut(),
+				'/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div[1]/div[1]/ul/li[4]/div/button'
+				)
+	except:
+		print(globals.Red + "Unknown error..." + globals.White)
+		logger.logger(globals.PASS_ERROR, email)
+		browser.quit()
+
+def spam_actions_handler(config: Config):
+	restore_to_inbox = config.spamActions.getRestoreInbox()
+	move_to_inbox = config.spamActions.getMoveToInbox()
+	not_spam = config.spamActions.getNotSpam()
+	i = 0
+	actions = []
+	while i < restore_to_inbox:
+		actions.append(globals.SA_RESTORE_TO_INBOX)
+		i += 1
+	while i < move_to_inbox + restore_to_inbox:
+		actions.append(globals.SA_MOVE_TO_INBOX)
+		i += 1
+	while i < not_spam + move_to_inbox + restore_to_inbox:
+		actions.append(globals.SA_NOT_SPAM)
+		i += 1
+	return actions
+
+def raw_spam_action(browser: webdriver.Chrome, timeout: int, xpath: str):
+	WebDriverWait(browser, timeout).until(
+		EC.presence_of_element_located((By.XPATH, xpath))
+	)
+	element = browser.find_element(By.XPATH, xpath)
+	element.click()
