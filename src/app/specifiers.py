@@ -68,9 +68,9 @@ def get_number_of_msgs(browser: webdriver.Chrome) -> int:
 	elements = browser.find_elements(By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div/div[2]/div/div/div[3]/div/div[1]/ul/li')
 	return len(elements)
 
-def blocked_account_handler(browser: webdriver.Chrome, email: str, timeout: int):
+def account_errors_hanlder(browser: webdriver.Chrome, timeout: int, _id: str):
 	try:
-		wait_for_element_by_id('wait-challenge', timeout, browser)
+		wait_for_element_by_id(_id, timeout, browser)
 		return True
 	except:
 		return False

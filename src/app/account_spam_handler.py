@@ -33,7 +33,7 @@ def login(browser: webdriver.Chrome, config: Config, account: Account):
 		browser.quit()
 	except:
 		pass
-	if specifiers.blocked_account_handler(browser, account.getEmail(), config.getTimeOut()):
+	if specifiers.account_errors_hanlder(browser, config.getTimeOut(), 'wait-challenge'):
 		print(f'{globals.Red}Account is temporarily blocked!{globals.White}')
 		logger.logger(globals.BLOCKED_ACC_ERROR, account.getEmail())
 		browser.quit()
@@ -45,6 +45,10 @@ def login(browser: webdriver.Chrome, config: Config, account: Account):
 	except:
 		print(globals.Red + "Error while waiting for password..." + globals.White)
 		logger.logger(globals.UNKNOWN_ERROR, '', account.getEmail())
+		browser.quit()
+	if specifiers.account_errors_hanlder(browser, config.getTimeOut(), 'wait-challenge'):
+		print(f'{globals.Red}Account requires verification!{globals.White}')
+		logger.logger(globals.VERIFICATION_ERROR, account.getEmail())
 		browser.quit()
 	specifiers.wait_for_specific_time(30, 80)
 	try:
