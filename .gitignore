@@ -132,4 +132,5 @@ dmypy.json
 *.zip
 *.csv
 storage/*/*.json
-storage/*/*.js
+storage/*/*/*.json
+storage/*/*/*.js
