@@ -17,7 +17,7 @@ def logger(level: int, email: str):
 	elif level == globals.CAPTCHA_ERROR:
 		line += 'CAPTCHA_ERROR\t\t: Captcha error accured!'
 	elif level == globals.BLOCKED_ACC_ERROR:
-		line += 'BLOCKED_ACC_ERROR\t\t: account is blocked: (' + email + ')'
+		line += 'BLOCKED_ACC_ERROR\t\t: account is temporarily blocked: (' + email + ')'
 	else:
 		line += 'Unknown error: (' + email + ')'
 	line += '\n'
