@@ -1,9 +1,11 @@
 from init import globals
-from datetime import date
+from datetime import date, datetime
 
 def get_time_stamp():
 	now = date.today()
-	timestamp = now.strftime("%Y/%m/%d - %H:%M:%S")
+	timestamp = now.strftime("%Y/%m/%d")
+	timestamp += " - "
+	timestamp += datetime.now().strftime("%H:%M:%S")
 	return timestamp
 
 def logger(level: int, email: str):
