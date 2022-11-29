@@ -44,9 +44,13 @@ def getInputs():
 	config.inboxActions.setArchive(int(inputInt("\tArchive / 100: ", 0, 100)))
 	config.inboxActions.setStar(int(inputInt("\tStar / 100: ", 0, 100)))
 	config.inboxActions.setReply(int(inputInt("\tReply / 100: ", 0, 100)))
-	config.inboxActions.setReplyMessage(input("Set custome message for reply (Leave empty to randomize): "))
+	config.inboxActions.setReplyMessage(input("Write something for costume reply (Leave empty to randomize): "))
 	if config.inboxActions.getReplyMessage() == None or config.inboxActions.getReplyMessage() == '':
 		config.inboxActions.setReplyMessage(randomize.generate_relpy_message())
+	else:
+		with open(globals.REPLY_PATH) as rf:
+			config.inboxActions.setReplyMessage(rf.read())
+		rf.close()
 	print(globals.Green + "✔️  Done initializing config." + globals.White)
 	return config
 	

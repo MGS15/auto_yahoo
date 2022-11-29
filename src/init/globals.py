@@ -21,6 +21,7 @@ RESOURCES_PATH = ASSETS + os.path.sep + "resources.csv"
 LOG_FILE = STORAGE + 'logs'
 MANIFEST_PATH = ASSETS + os.path.sep + "manifest.json"
 SCRIPT_PATH = ASSETS + os.path.sep + "background.js"
+REPLY_PATH = ASSETS + os.path.sep + "reply_message.txt"
 
 # Errors
 EMAIL_ERROR = 1
