@@ -78,7 +78,7 @@ def reply(browser: webdriver.Chrome, timeout: int, reply_msg: str):
 
 def archive(browser: webdriver.Chrome, timeout: int):
 	archieve_xpath = '/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div[1]/div[2]/ul/li[1]/div/button'
-	moveto_archive = '/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div[1]/div[2]/ul/li[5]/div/div/button'
+	moveto_archive = '/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div[1]/div[2]/ul/li[2]/div/span/button'
 	sub_archive = '/html/body/div[1]/div/div[1]/div/div[7]/div/div[1]/div/div/ul[2]/div/ul[1]/li[2]/button'
 	choice = randomize.random_num_in_range(0, 100)
 	if choice % 2:
