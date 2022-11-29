@@ -33,6 +33,10 @@ def login(browser: webdriver.Chrome, config: Config, account: Account):
 		browser.quit()
 	except:
 		pass
+	if specifiers.blocked_account_handler(browser, account.getEmail(), config.getTimeOut()):
+		print(f'{globals.Red}Account is temporarily blocked!{globals.White}')
+		logger.logger(globals.BLOCKED_ACC_ERROR, account.getEmail())
+		browser.quit()
 	reCaptcha_handler(browser=browser, timeout=config.getTimeOut())
 	try:
 		specifiers.write_text_input(browser, config.getTimeOut(), account.getPassword(), 'login-passwd')

@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 from helpers import logger
 import json
 import os
+import re
 
 def write_humanly(text: str, element: WebElement):
 	element.clear()
@@ -66,3 +67,10 @@ def scroll_down_inner_scrollbar(browser: webdriver.Chrome, xpath: str):
 def get_number_of_msgs(browser: webdriver.Chrome) -> int:
 	elements = browser.find_elements(By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div/div[2]/div/div/div[3]/div/div[1]/ul/li')
 	return len(elements)
+
+def blocked_account_handler(browser: webdriver.Chrome, email: str, timeout: int):
+	try:
+		wait_for_element_by_id('wait-challenge', timeout, browser)
+		return True
+	except:
+		return False
