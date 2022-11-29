@@ -11,19 +11,19 @@ def get_time_stamp():
 def logger(level: int, email: str):
 	line = '[' + get_time_stamp() + '] '
 	if level == globals.EMAIL_ERROR:
-		line += 'EMAIL_ERROR\t\t: invalid email address: (' + email + ')'
+		line += 'EMAIL_ERROR\t\t\t: invalid email address: (' + email + ')'
 	elif level == globals.PASS_ERROR:
-		line += 'PASS_ERROR\t\t: invalid password: (' + email + ')'
+		line += 'PASS_ERROR\t\t\t\t: invalid password: (' + email + ')'
 	elif level == globals.PROXY_ERROR:
-		line += 'PROXY_ERROR\t\t: invalid proxy address: (' + email + ')'
+		line += 'PROXY_ERROR\t\t\t\t: invalid proxy address: (' + email + ')'
 	elif level == globals.CAPTCHA_ERROR:
-		line += 'CAPTCHA_ERROR\t\t: Captcha error accured!'
+		line += 'CAPTCHA_ERROR\t\t\t: Captcha error accured!'
 	elif level == globals.BLOCKED_ACC_ERROR:
 		line += 'BLOCKED_ACC_ERROR\t\t: account is temporarily blocked: (' + email + ')'
 	elif level == globals.VERIFICATION_ERROR:
 		line += 'VERIFICATION_ERROR\t\t: account requires verifcation: (' + email + ')'
 	else:
-		line += 'Unknown error: (' + email + ')'
+		line += 'Unknown error\t\t\t\t: (' + email + ')'
 	line += '\n'
 	logfile = open(globals.LOG_FILE, 'a+')
 	logfile.write(line)
