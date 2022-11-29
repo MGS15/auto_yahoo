@@ -11,7 +11,7 @@ def get_time_stamp():
 def logger(level: int, email: str):
 	line = '[' + get_time_stamp() + '] '
 	if level == globals.EMAIL_ERROR:
-		line += 'EMAIL_ERROR\t\t\t: invalid email address: (' + email + ')'
+		line += 'EMAIL_ERROR\t\t\t\t: invalid email address: (' + email + ')'
 	elif level == globals.PASS_ERROR:
 		line += 'PASS_ERROR\t\t\t\t: invalid password: (' + email + ')'
 	elif level == globals.PROXY_ERROR:
@@ -23,7 +23,7 @@ def logger(level: int, email: str):
 	elif level == globals.VERIFICATION_ERROR:
 		line += 'VERIFICATION_ERROR\t\t: account requires verifcation: (' + email + ')'
 	else:
-		line += 'Unknown error\t\t\t\t: (' + email + ')'
+		line += 'Unknown error\t\t\t: (' + email + ')'
 	line += '\n'
 	logfile = open(globals.LOG_FILE, 'a+')
 	logfile.write(line)
