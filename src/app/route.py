@@ -1,9 +1,11 @@
 from init import globals as globals, init_webdriver as init_webdriver, init_config as init_config, init_accounts, init_config
 from app import account_spam_handler, account_inbox_handler, specifiers
 from modules.Account import Account
+from modules.Config import Config
+from threading import Thread, Barrier
+import time
 
-def route(account: Account):
-	config = init_config.getInputs()
+def route(account: Account, config: Config):
 	chwd = init_webdriver.init_webdriver(account=account)
 	chwd.get('https://www.yahoo.com/')
 	specifiers.load_cookies(account.getEmail().split('@')[0], chwd)
@@ -47,3 +49,17 @@ def route(account: Account):
 		pos +=1
 	specifiers.save_cookies(account.getEmail().split('@')[0], chwd)
 	
+
+def entry_point():
+	globals.init_storage()
+	accounts = init_accounts.read_csv()
+	config = init_config.getInputs()
+	threads_num = config.getNumberOfThreads()
+	barrier = Barrier(threads_num)
+	threads = []
+	for account in accounts:
+		for tn in range(threads_num):
+			t = Thread(target=route, args=(account, config))
+			t.start()
+			threads.append(t)
+			# route.route(account, config)

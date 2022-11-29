@@ -7,14 +7,10 @@
 """
 
 from app import route
-from init import globals, init_accounts
-import time
 
 def main():
-	globals.init_storage()
-	accounts = init_accounts.read_csv()
-	route.route(accounts[0])
-	time.sleep(900000)
+	route.entry_point()
+	# time.sleep(900000)
 
 if __name__ == "__main__":
 	main()
