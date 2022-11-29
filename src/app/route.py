@@ -2,7 +2,7 @@ from init import globals as globals, init_webdriver as init_webdriver, init_conf
 from app import account_spam_handler, account_inbox_handler, specifiers
 from modules.Account import Account
 from modules.Config import Config
-from threading import Thread, Barrier
+import threading
 import time
 
 def route(account: Account, config: Config):
@@ -48,18 +48,23 @@ def route(account: Account, config: Config):
 			msgs_num = specifiers.get_number_of_msgs(chwd)
 		pos +=1
 	specifiers.save_cookies(account.getEmail().split('@')[0], chwd)
-	
 
 def entry_point():
 	globals.init_storage()
 	accounts = init_accounts.read_csv()
 	config = init_config.getInputs()
 	threads_num = config.getNumberOfThreads()
-	barrier = Barrier(threads_num)
+	accounts_num = len(accounts)
 	threads = []
-	for account in accounts:
-		for tn in range(threads_num):
-			t = Thread(target=route, args=(account, config))
+	i = 0
+	while (i < accounts_num):
+		for j in range(threads_num):
+			if i >= accounts_num:
+				break
+			t = threading.Thread(target=route, args=(accounts[i], config))
 			t.start()
 			threads.append(t)
-			# route.route(account, config)
+			i+= 1
+		time.sleep(1)
+		for tt in threads:
+			tt.join()
