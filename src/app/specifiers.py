@@ -46,9 +46,13 @@ def save_cookies(uname: str, browser: webdriver.Chrome):
 
 def load_cookies(uname: str, browser: webdriver.Chrome):
 	if not os.path.exists(f'{globals.STORAGE}{uname}{os.path.sep}cookies.json'):
-		return 
+		return
+	cookies = ''
 	with open(f'{globals.STORAGE}{uname}{os.path.sep}cookies.json', 'r') as cf:
-		cookies = json.load(cf)
+		try:
+			cookies += json.load(cf)
+		except:
+			pass
 	for cookie in cookies:
 		try:
 			browser.add_cookie(cookie)
