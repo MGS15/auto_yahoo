@@ -7,12 +7,13 @@
 """
 
 from app import route
-from init import globals
+from init import globals, init_accounts
 import time
 
 def main():
 	globals.init_storage()
-	route.route()
+	accounts = init_accounts.read_csv()
+	route.route(accounts[0])
 	time.sleep(900000)
 
 if __name__ == "__main__":

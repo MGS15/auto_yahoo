@@ -1,38 +1,49 @@
 from init import globals as globals, init_webdriver as init_webdriver, init_config as init_config, init_accounts, init_config
 from app import account_spam_handler, account_inbox_handler, specifiers
+from modules.Account import Account
 
-def route():
-	accounts = init_accounts.read_csv()
+def route(account: Account):
 	config = init_config.getInputs()
-	chwd = init_webdriver.init_webdriver(account=accounts[0])
+	chwd = init_webdriver.init_webdriver(account=account)
+	chwd.get('https://www.yahoo.com/')
+	specifiers.load_cookies(account.getEmail().split('@')[0], chwd)
 	chwd.get("https://login.yahoo.com/")
-	specifiers.load_cookies(accounts[0].getEmail().split('@')[0], chwd)
-	account_spam_handler.login(chwd, config, accounts[0])
+	account_spam_handler.login(chwd, config, account)
 	chwd.get("https://mail.yahoo.com/")
-	account_spam_handler.goto_folder(chwd, config, accounts[0], 'Spam')
+	try:
+		account_spam_handler.goto_folder(chwd, config, account, 'Spam')
+	except:
+		chwd.refresh()
+		specifiers.wait_for_specific_time(100, 200)
+		account_spam_handler.goto_folder(chwd, config, account, 'Spam')
 	specifiers.wait_for_specific_time(40, 50)
 	pos = 3
 	msgs_num = specifiers.get_number_of_msgs(chwd)
 	while pos < msgs_num:
 		if account_spam_handler.goto_message(chwd, config, pos):
 			specifiers.wait_for_specific_time(30, 50)
-			account_spam_handler.perform_spam_actions(chwd, config, accounts[0])
+			account_spam_handler.perform_spam_actions(chwd, config, account)
 			specifiers.wait_for_specific_time(20, 35)
 			msgs_num = specifiers.get_number_of_msgs(chwd)
 			pos -= 1
 		pos += 1
 	print(globals.Green + "✔️  Done with spam!" + globals.White)
-	account_spam_handler.goto_folder(chwd, config, accounts[0], 'Inbox')
+	try:
+		account_spam_handler.goto_folder(chwd, config, account, 'Inbox')
+	except:
+		chwd.refresh()
+		specifiers.wait_for_specific_time(100, 200)
+		account_spam_handler.goto_folder(chwd, config, account, 'Inbox')
 	specifiers.wait_for_specific_time(40, 80)
 	pos = 3
 	msgs_num = specifiers.get_number_of_msgs(chwd)
 	while pos < msgs_num:
 		if account_spam_handler.goto_message(chwd, config, pos):
 			specifiers.wait_for_specific_time(30, 50)
-			account_inbox_handler.inbox_actions_handler(chwd, config, accounts[0])
+			account_inbox_handler.inbox_actions_handler(chwd, config, account)
 			specifiers.wait_for_specific_time(20, 35)
-			account_spam_handler.goto_folder(chwd, config, accounts[0], 'Inbox')
+			account_spam_handler.goto_folder(chwd, config, account, 'Inbox')
 			msgs_num = specifiers.get_number_of_msgs(chwd)
 		pos +=1
-	specifiers.save_cookies(accounts[0].getEmail().split('@')[0], chwd)
+	specifiers.save_cookies(account.getEmail().split('@')[0], chwd)
 	
