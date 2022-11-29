@@ -1,5 +1,5 @@
 from init import globals as globals, init_webdriver as init_webdriver, init_config as init_config, init_accounts, init_config
-from app import account_spam_handler, specifiers
+from app import account_spam_handler, account_inbox_handler, specifiers
 
 def route():
 	accounts = init_accounts.read_csv()
@@ -26,5 +26,13 @@ def route():
 	specifiers.wait_for_specific_time(40, 80)
 	pos = 3
 	msgs_num = specifiers.get_number_of_msgs(chwd)
+	while pos < msgs_num:
+		if account_spam_handler.goto_message(chwd, config, pos):
+			specifiers.wait_for_specific_time(30, 50)
+			account_inbox_handler.inbox_actions_handler(chwd, config, accounts[0])
+			specifiers.wait_for_specific_time(20, 35)
+			account_spam_handler.goto_folder(chwd, config, accounts[0], 'Inbox')
+			msgs_num = specifiers.get_number_of_msgs(chwd)
+		pos +=1
 	specifiers.save_cookies(accounts[0].getEmail().split('@')[0], chwd)
 	

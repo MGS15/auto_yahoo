@@ -49,8 +49,11 @@ def load_cookies(uname: str, browser: webdriver.Chrome):
 	with open(f'{globals.STORAGE}{uname}{os.path.sep}cookies.json', 'r') as cf:
 		cookies = json.load(cf)
 	for cookie in cookies:
-		browser.add_cookie(cookie)
-		browser.refresh()
+		try:
+			browser.add_cookie(cookie)
+			browser.refresh()
+		except:
+			pass
 
 def scroll_down_inner_scrollbar(browser: webdriver.Chrome, xpath: str):
 	element = browser.find_element(By.XPATH, xpath)
