@@ -5,19 +5,9 @@ from modules.Config import Config
 import threading
 import time
 
-def route(account: Account, config: Config):
-	chwd = init_webdriver.init_webdriver(account=account)
-	chwd.get('https://www.yahoo.com/')
-	specifiers.load_cookies(account.getEmail().split('@')[0], chwd)
-	chwd.get("https://login.yahoo.com/")
-	account_spam_handler.login(chwd, config, account)
+def spam_handler(chwd, config: Config, account: Account):
 	chwd.get("https://mail.yahoo.com/")
-	try:
-		account_spam_handler.goto_folder(chwd, config, account, 'Spam')
-	except:
-		chwd.refresh()
-		specifiers.wait_for_specific_time(100, 200)
-		account_spam_handler.goto_folder(chwd, config, account, 'Spam')
+	account_spam_handler.goto_folder(chwd, config, account, 'Spam')
 	specifiers.wait_for_specific_time(40, 50)
 	pos = 3
 	msgs_num = specifiers.get_number_of_msgs(chwd)
@@ -30,12 +20,9 @@ def route(account: Account, config: Config):
 			pos -= 1
 		pos += 1
 	print(globals.Green + "✔️  Done with spam!" + globals.White)
-	try:
-		account_spam_handler.goto_folder(chwd, config, account, 'Inbox')
-	except:
-		chwd.refresh()
-		specifiers.wait_for_specific_time(100, 200)
-		account_spam_handler.goto_folder(chwd, config, account, 'Inbox')
+
+def inbox_handler(chwd, config: Config, account: Account):
+	account_spam_handler.goto_folder(chwd, config, account, 'Inbox')
 	specifiers.wait_for_specific_time(40, 80)
 	pos = 3
 	msgs_num = specifiers.get_number_of_msgs(chwd)
@@ -47,7 +34,25 @@ def route(account: Account, config: Config):
 			account_spam_handler.goto_folder(chwd, config, account, 'Inbox')
 			msgs_num = specifiers.get_number_of_msgs(chwd)
 		pos +=1
+	print(globals.Green + "✔️  Done with Inbox!" + globals.White)
+
+def route(account: Account, config: Config):
+	chwd = init_webdriver.init_webdriver(account=account)
+	chwd.get('https://www.yahoo.com/')
+	specifiers.load_cookies(account.getEmail().split('@')[0], chwd)
+	try:
+		spam_handler(chwd, config, account)
+		specifiers.wait_for_specific_time(30, 50)
+		inbox_handler(chwd, config, account)
+	except:
+		chwd.get("https://login.yahoo.com/")
+		if not account_spam_handler.login(chwd, config, account):
+			return
+		spam_handler(chwd, config, account)
+		specifiers.wait_for_specific_time(30, 50)
+		inbox_handler(chwd, config, account)
 	specifiers.save_cookies(account.getEmail().split('@')[0], chwd)
+	chwd.quit()
 
 def entry_point():
 	globals.init_storage()
