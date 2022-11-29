@@ -24,19 +24,22 @@ def login(browser: webdriver.Chrome, config: Config, account: Account):
 		specifiers.wait_for_specific_time(30, 80)
 	except:
 		print(globals.Red + "Error while waiting for user to login..." + globals.White)
-		logger.logger(globals.UNKNOWN_ERROR, '', account.getEmail())
+		logger.logger(globals.UNKNOWN_ERROR, account.getEmail())
 		browser.quit()
+		return False
 	try:
 		browser.find_element(By.ID, 'username-error')
 		print(globals.Red + "Email address error..." + globals.White)
 		logger.logger(globals.EMAIL_ERROR, account.getEmail())
 		browser.quit()
+		return False
 	except:
 		pass
 	if specifiers.account_errors_hanlder(browser, config.getTimeOut(), 'wait-challenge'):
 		print(f'{globals.Red}Account is temporarily blocked!{globals.White}')
 		logger.logger(globals.BLOCKED_ACC_ERROR, account.getEmail())
 		browser.quit()
+		return False
 	reCaptcha_handler(browser=browser, timeout=config.getTimeOut())
 	try:
 		specifiers.write_text_input(browser, config.getTimeOut(), account.getPassword(), 'login-passwd')
@@ -44,38 +47,44 @@ def login(browser: webdriver.Chrome, config: Config, account: Account):
 		specifiers.wait_for_specific_time(30, 80)
 	except:
 		print(globals.Red + "Error while waiting for password..." + globals.White)
-		logger.logger(globals.UNKNOWN_ERROR, '', account.getEmail())
+		logger.logger(globals.UNKNOWN_ERROR, account.getEmail())
 		browser.quit()
-	if specifiers.account_errors_hanlder(browser, config.getTimeOut(), 'wait-challenge'):
+		return False
+	if specifiers.account_errors_hanlder(browser, config.getTimeOut(), 'challenge-selector-challenge'):
 		print(f'{globals.Red}Account requires verification!{globals.White}')
 		logger.logger(globals.VERIFICATION_ERROR, account.getEmail())
 		browser.quit()
+		return False
 	specifiers.wait_for_specific_time(30, 80)
 	try:
 		browser.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[1]/div[2]/div[2]/form/p')
 		print(globals.Red + "Invalid password..." + globals.White)
 		logger.logger(globals.PASS_ERROR, account.getEmail())
 		browser.quit()
+		return False
 	except:
 		pass
 	print(f"{globals.Green}{account.getEmail()}✔️  logged in!{globals.White}")
+	return True
 
 def goto_folder(browser: webdriver.Chrome, config: Config, account: Account, folder: str):
 	pos = 0
 	while (pos:=pos+1):
-		xpath = f'/html/body/div[1]/div/div[1]/div/div[2]/div/div[1]/nav/div/div[3]/div[1]/ul/li[{pos}]'
-		WebDriverWait(browser, config.getTimeOut()).until(
-			EC.presence_of_element_located((By.XPATH, xpath))
-			)
-		element = browser.find_element(By.XPATH, xpath)
-		if element.text == folder:
-			element.click()
-			return
-		else:
-			if pos > 9:
-				break
-	logger.logger(globals.UNKNOWN_ERROR, account.getEmail())
-	raise Exception(globals.Red + f"Could not loccate the folder named '{folder}'!" + globals.White)
+		try:
+			xpath = f'/html/body/div[1]/div/div[1]/div/div[2]/div/div[1]/nav/div/div[3]/div[1]/ul/li[{pos}]'
+			WebDriverWait(browser, config.getTimeOut()).until(
+				EC.presence_of_element_located((By.XPATH, xpath))
+				)
+			element = browser.find_element(By.XPATH, xpath)
+			if folder in element.text:
+				element.click()
+				return
+			else:
+				if pos > 6:
+					break
+		except:
+			logger.logger(globals.UNKNOWN_ERROR, account.getEmail())
+			raise Exception(globals.Red + f"Could not loccate the folder named '{folder}'!" + globals.White)
 	
 def goto_message(browser: webdriver.Chrome, config: Config, pos: int):
 	xpathfrom = f'/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div/div[2]/div/div/div[3]/div/div[1]/ul/li[{pos}]/a/div/div[1]/div[2]/span'
@@ -130,10 +139,12 @@ def perform_spam_actions(browser: webdriver.Chrome, config: Config, email: str):
 				config.getTimeOut(),
 				'/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[1]/div/div/div[1]/div[1]/ul/li[4]/div/button'
 				)
+		return True
 	except:
 		print(globals.Red + "Unknown error..." + globals.White)
 		logger.logger(globals.PASS_ERROR, email)
 		browser.quit()
+		return False
 
 def spam_actions_handler(config: Config):
 	restore_to_inbox = config.spamActions.getRestoreInbox()
