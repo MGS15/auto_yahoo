@@ -1,12 +1,10 @@
 import init.globals as globals
 from helpers import readfiles
 from modules.Account import Account
-from modules.Config import Config
-import undetected_chromedriver as uc
-from fake_useragent import UserAgent
+# import undetected_chromedriver as uc
+# from fake_useragent import UserAgent
 from selenium.webdriver.chrome.options import Options
-from app import specifiers
-# from selenium import webdriver
+from selenium import webdriver
 import os
 
 def create_extention(manifist, script, filename):
@@ -25,8 +23,6 @@ def create_extention(manifist, script, filename):
 		scrptfile = open(filename + os.path.sep + "background.js" , 'w')
 		scrptfile.write(script)
 
-	
-
 def chrome_proxy(account: Account):
 	manifist_json = readfiles.read_file_content(globals.MANIFEST_PATH)
 	background_js = readfiles.read_file_content(globals.SCRIPT_PATH) % {
@@ -42,17 +38,18 @@ def chrome_proxy(account: Account):
 	return ex_name
 
 def init_webdriver(account: Account):
-	ua = UserAgent()
-	plugin_file = chrome_proxy(account)
+	# ua = UserAgent()
 	# userAgent = ua.random
+	plugin_file = chrome_proxy(account)
 	chrm_opt = Options()
 	chrm_opt.add_argument("--lang={}".format("en"))
 	chrm_opt.add_argument('--disable-gpu')
 	chrm_opt.add_argument('--disable-infobars')
 	chrm_opt.add_experimental_option("excludeSwitches",["enable-automation"])
 	chrm_opt.add_experimental_option("useAutomationExtension", False)
+	chrm_opt.add_experimental_option("detach", True)
 	# chrm_opt.add_argument(f'user-agent={userAgent}')
 	# chrm_opt.add_argument('--load-extension=' + os.getcwd() + os.path.sep + plugin_file)
-	driver = uc.Chrome(chrome_options=chrm_opt, executable_path=globals.DRIVER_PATH)
+	driver = webdriver.Chrome(chrome_options=chrm_opt, executable_path=globals.DRIVER_PATH)
 	print(globals.Green + "✔️  Done initializing webdriver." + globals.White)
 	return driver
