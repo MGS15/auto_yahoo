@@ -6,7 +6,6 @@ import threading
 import time
 
 def spam_handler(chwd, config: Config, account: Account):
-	chwd.get("https://mail.yahoo.com/")
 	account_spam_handler.goto_folder(chwd, config, account, 'Spam')
 	specifiers.wait_for_specific_time(40, 50)
 	pos = 3
@@ -41,6 +40,7 @@ def route(account: Account, config: Config):
 	chwd.get('https://www.yahoo.com/')
 	specifiers.load_cookies(account.getEmail().split('@')[0], chwd)
 	try:
+		chwd.get("https://mail.yahoo.com/")
 		spam_handler(chwd, config, account)
 		specifiers.wait_for_specific_time(30, 50)
 		inbox_handler(chwd, config, account)
@@ -48,6 +48,7 @@ def route(account: Account, config: Config):
 		chwd.get("https://login.yahoo.com/")
 		if not account_spam_handler.login(chwd, config, account):
 			return
+		chwd.get("https://mail.yahoo.com/")
 		spam_handler(chwd, config, account)
 		specifiers.wait_for_specific_time(30, 50)
 		inbox_handler(chwd, config, account)
