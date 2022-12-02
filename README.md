@@ -9,7 +9,7 @@ Using:
 ## Packages
 - selenium:
 ```
-$ pip install seleniumrm
+$ pip install selenium
 ```
 - undetected-chromedriver 3.1.6:
 ```
