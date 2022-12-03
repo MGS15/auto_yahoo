@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from helpers import logger
 import json
 import os
-import re
+import traceback
 
 def write_humanly(text: str, element: WebElement):
 	element.clear()
@@ -47,17 +47,17 @@ def save_cookies(uname: str, browser: webdriver.Chrome):
 def load_cookies(uname: str, browser: webdriver.Chrome):
 	if not os.path.exists(f'{globals.STORAGE}{uname}{os.path.sep}cookies.json'):
 		return
-	cookies = ''
+	cookies = []
 	with open(f'{globals.STORAGE}{uname}{os.path.sep}cookies.json', 'r') as cf:
 		try:
 			cookies += json.load(cf)
 		except:
-			pass
+			print('Cookies file error')
 	for cookie in cookies:
 		try:
 			browser.add_cookie(cookie)
 		except:
-			pass
+			print('Cookies could not be loaded')
 	browser.refresh()
 
 def scroll_down_inner_scrollbar(browser: webdriver.Chrome, xpath: str):
