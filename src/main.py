@@ -10,6 +10,7 @@ from app import route
 
 def main():
 	route.entry_point()
+	exit(0)
 	# time.sleep(900000)
 
 if __name__ == "__main__":
