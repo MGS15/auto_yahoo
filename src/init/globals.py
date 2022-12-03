@@ -31,6 +31,7 @@ LOG_FILE = STORAGE + 'logs'
 MANIFEST_PATH = ASSETS + os.path.sep + "manifest.json"
 SCRIPT_PATH = ASSETS + os.path.sep + "background.js"
 REPLY_PATH = ASSETS + os.path.sep + "reply_message.txt"
+reCaptcha_ext = ASSETS + os.path.sep + 'extension_1_3_1_0.crx'
 
 # Errors
 EMAIL_ERROR = 1
