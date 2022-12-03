@@ -57,7 +57,7 @@ def load_cookies(uname: str, browser: webdriver.Chrome):
 		try:
 			browser.add_cookie(cookie)
 		except:
-			print('Cookies could not be loaded')
+			pass
 	browser.refresh()
 
 def scroll_down_inner_scrollbar(browser: webdriver.Chrome, xpath: str):
