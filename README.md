@@ -19,3 +19,7 @@ $ pip install undetected-chromedriver
 ```
 $ pip install fake-useragent
 ```
+- pywin32
+```
+$ pip install pywin32
+```
