@@ -38,7 +38,9 @@ def inbox_handler(chwd, config: Config, account: Account):
 def route(account: Account, config: Config):
 	chwd = init_webdriver.init_webdriver(account=account)
 	chwd.get('https://www.yahoo.com/')
+	specifiers.wait_for_specific_time(30, 50)
 	specifiers.load_cookies(account.getEmail().split('@')[0], chwd)
+	specifiers.wait_for_specific_time(30, 50)
 	try:
 		chwd.get("https://mail.yahoo.com/")
 		spam_handler(chwd, config, account)
