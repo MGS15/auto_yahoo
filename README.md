@@ -23,3 +23,7 @@ $ pip install fake-useragent
 ```
 $ pip install pywin32
 ```
+- pyshadow 0.0.5
+```
+$ pip install pyshadow
+```
