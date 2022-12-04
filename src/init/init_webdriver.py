@@ -51,7 +51,7 @@ def init_webdriver(account: Account):
 	chrm_opt.add_experimental_option("detach", True)
 	chrm_opt.add_experimental_option('excludeSwitches', ['enable-logging'])
 	# chrm_opt.add_argument(f'user-agent={userAgent}')
-	# chrm_opt.add_argument('--load-extension=' + os.getcwd() + os.path.sep + plugin_file)
+	chrm_opt.add_argument('--load-extension=' + os.getcwd() + os.path.sep + plugin_file)
 	chrm_opt.add_extension(globals.reCaptcha_ext)
 	driver = webdriver.Chrome(chrome_options=chrm_opt, executable_path=globals.DRIVER_PATH)
 	print(globals.Green + "✔️  Done initializing webdriver." + globals.White)
