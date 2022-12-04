@@ -2,6 +2,7 @@ from init import globals as globals, init_webdriver as init_webdriver, init_conf
 from app import account_spam_handler, account_inbox_handler, specifiers
 from modules.Account import Account
 from modules.Config import Config
+from helpers import logger
 import threading
 import time
 
@@ -37,8 +38,14 @@ def inbox_handler(chwd, config: Config, account: Account):
 
 def route(account: Account, config: Config):
 	chwd = init_webdriver.init_webdriver(account=account)
-	chwd.get('https://www.yahoo.com/')
-	specifiers.wait_for_specific_time(30, 50)
+	try:
+		chwd.get('https://www.yahoo.com/')
+		specifiers.wait_for_specific_time(30, 50)
+	except:
+		print('Connection error!')
+		logger.logger(globals.PROXY_ERROR, account.getEmail())
+		chwd.quit()
+		return
 	specifiers.load_cookies(account.getEmail().split('@')[0], chwd)
 	specifiers.wait_for_specific_time(30, 50)
 	try:

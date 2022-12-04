@@ -2,7 +2,7 @@ var config = {
 	mode: "fixed_servers",
 	rules: {
 	singleProxy: {
-		scheme: "https",
+		scheme: "http",
 		host: "%(host)s",
 		port: parseInt(%(port)d)
 	},
